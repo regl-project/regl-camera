@@ -1,0 +1,32 @@
+{
+  "name": "regl-camera",
+  "version": "1.0.0",
+  "description": "Camera for regl",
+  "main": "regl-camera.js",
+  "dependencies": {
+    "gl-mat4": "^1.1.4",
+    "mouse-wheel": "^1.2.0",
+    "mouse-change": "^1.3.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mikolalysenko/regl-camera.git"
+  },
+  "keywords": [
+    "regl",
+    "camera",
+    "3d",
+    "orbit",
+    "turntable"
+  ],
+  "author": "Mikola Lysenko",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mikolalysenko/regl-camera/issues"
+  },
+  "homepage": "https://github.com/mikolalysenko/regl-camera#readme"
+}
