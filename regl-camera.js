@@ -18,7 +18,10 @@ function createCamera (regl, props_) {
     phi: props.phi || 0,
     distance: Math.log(props.distance || 10.0),
     eye: new Float32Array(3),
-    up: new Float32Array(props.up || [0, 1, 0])
+    up: new Float32Array(props.up || [0, 1, 0]),
+    fovy: props.fovy || Math.PI / 4.0,
+    near: typeof props.near !== 'undefined' ? props.near : 0.01,
+    far: typeof props.far !== 'undefined' ? props.far : 1000.0
   }
 
   var right = new Float32Array([1, 0, 0])
@@ -103,10 +106,10 @@ function createCamera (regl, props_) {
     context: Object.assign({}, cameraState, {
       projection: function ({viewportWidth, viewportHeight}) {
         return perspective(cameraState.projection,
-          Math.PI / 4.0,
+          cameraState.fovy,
           viewportWidth / viewportHeight,
-          0.01,
-          1000.0)
+          cameraState.near,
+          cameraState.far)
       }
     }),
     uniforms: Object.keys(cameraState).reduce(function (uniforms, name) {
