@@ -21,7 +21,8 @@ function createCamera (regl, props_) {
     up: new Float32Array(props.up || [0, 1, 0]),
     fovy: props.fovy || Math.PI / 4.0,
     near: typeof props.near !== 'undefined' ? props.near : 0.01,
-    far: typeof props.far !== 'undefined' ? props.far : 1000.0
+    far: typeof props.far !== 'undefined' ? props.far : 1000.0,
+    flipY: !!props.flipY,
   }
 
   var right = new Float32Array([1, 0, 0])
@@ -105,11 +106,13 @@ function createCamera (regl, props_) {
   var injectContext = regl({
     context: Object.assign({}, cameraState, {
       projection: function ({viewportWidth, viewportHeight}) {
-        return perspective(cameraState.projection,
+        perspective(cameraState.projection,
           cameraState.fovy,
           viewportWidth / viewportHeight,
           cameraState.near,
           cameraState.far)
+        if (cameraState.flipY) { cameraState.projection[5] *= -1 }
+        return cameraState.projection
       }
     }),
     uniforms: Object.keys(cameraState).reduce(function (uniforms, name) {
