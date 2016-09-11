@@ -65,6 +65,7 @@ npm i regl-camera
   + `phi` the phi angle for the camera
   + `distance` the distance from the camera eye to the center
   + `up` the up vector for the camera
+  + `mouse` set to `false` to turn off mouse events
 
 ### Command usage
 
