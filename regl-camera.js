@@ -31,22 +31,23 @@ function createCamera (regl, props_) {
 
   var prevX = 0
   var prevY = 0
-  mouseChange(function (buttons, x, y) {
-    if (buttons & 1) {
-      var dx = (x - prevX) / window.innerWidth
-      var dy = (y - prevY) / window.innerHeight
-      var w = Math.max(cameraState.distance, 0.5)
+  if (props.mouse !== false) {
+    mouseChange(function (buttons, x, y) {
+      if (buttons & 1) {
+        var dx = (x - prevX) / window.innerWidth
+        var dy = (y - prevY) / window.innerHeight
+        var w = Math.max(cameraState.distance, 0.5)
 
-      dtheta += w * dx
-      dphi += w * dy
-    }
-    prevX = x
-    prevY = y
-  })
-
-  mouseWheel(function (dx, dy) {
-    ddistance += dy / window.innerHeight
-  })
+        dtheta += w * dx
+        dphi += w * dy
+      }
+      prevX = x
+      prevY = y
+    })
+    mouseWheel(function (dx, dy) {
+      ddistance += dy / window.innerHeight
+    })
+  }
 
   function damp (x) {
     var xd = x * 0.9
