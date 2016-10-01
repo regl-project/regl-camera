@@ -110,10 +110,10 @@ function createCamera (regl, props_) {
 
   var injectContext = regl({
     context: Object.assign({}, cameraState, {
-      projection: function ({viewportWidth, viewportHeight}) {
+      projection: function (context) {
         perspective(cameraState.projection,
           cameraState.fovy,
-          viewportWidth / viewportHeight,
+          context.viewportWidth / context.viewportHeight,
           cameraState.near,
           cameraState.far)
         if (cameraState.flipY) { cameraState.projection[5] *= -1 }
