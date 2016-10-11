@@ -24,7 +24,7 @@ function createCamera (regl, props_) {
     far: typeof props.far !== 'undefined' ? props.far : 1000.0,
     flipY: !!props.flipY,
     dtheta: 0,
-    dphi: 0,
+    dphi: 0
   }
 
   var damping = typeof props.damping !== 'undefined' ? props.damping : 0.9
