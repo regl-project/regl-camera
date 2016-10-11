@@ -66,6 +66,7 @@ npm i regl-camera
   + `distance` the distance from the camera eye to the center
   + `up` the up vector for the camera
   + `mouse` set to `false` to turn off mouse events
+  + `damping` multiplier for inertial damping (default 0.9). Set to 0 to disable inertia.
 
 ### Command usage
 
