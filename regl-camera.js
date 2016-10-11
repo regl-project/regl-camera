@@ -24,8 +24,7 @@ function createCamera (regl, props_) {
     far: typeof props.far !== 'undefined' ? props.far : 1000.0,
     flipY: !!props.flipY,
     dtheta: 0,
-    dphi: 0,
-    damping: typeof props.damping !== 'undefined' ? props.damping : 0.9
+    dphi: 0
   }
 
   var right = new Float32Array([1, 0, 0])
@@ -58,7 +57,7 @@ function createCamera (regl, props_) {
   }
 
   function damp (x) {
-    var xd = x * cameraState.damping
+    var xd = x * 0.9
     if (Math.abs(xd) < 0.1) {
       return 0
     }
