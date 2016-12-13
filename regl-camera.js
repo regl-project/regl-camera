@@ -8,39 +8,56 @@ module.exports = createCamera
 
 var isBrowser = typeof window !== 'undefined'
 
-function createCamera (regl, props_) {
-  var props = props_ || {}
+var defaultProps = {
+  // initial cameraState
+  center: [0, 0, 0],
+  theta: 0,
+  phi: 0,
+  distance: 10,
+  up: [0, 1, 0],
+  fovy: Math.PI / 4.0,
+  near: 0.01,
+  far: 1000,
+  flipY: false,
+  // properties
+  damping: 0.9,
+  minDistance: 0.1,
+  maxDistance: 1000,
+  mouse: true
+}
+
+function createCamera (regl, propsOverride) {
+  var props = Object.assign({}, defaultProps, propsOverride)
+
   var cameraState = {
     view: identity(new Float32Array(16)),
     projection: identity(new Float32Array(16)),
-    center: new Float32Array(props.center || 3),
-    theta: props.theta || 0,
-    phi: props.phi || 0,
-    distance: Math.log(props.distance || 10.0),
+    center: new Float32Array(props.center),
+    theta: props.theta,
+    phi: props.phi,
+    distance: Math.log(props.distance),
     eye: new Float32Array(3),
-    up: new Float32Array(props.up || [0, 1, 0]),
-    fovy: props.fovy || Math.PI / 4.0,
-    near: typeof props.near !== 'undefined' ? props.near : 0.01,
-    far: typeof props.far !== 'undefined' ? props.far : 1000.0,
-    flipY: !!props.flipY,
+    up: new Float32Array(props.up),
+    fovy: props.fovy,
+    near: props.near,
+    far: props.far,
+    flipY: Boolean(props.flipY),
     dtheta: 0,
     dphi: 0
   }
 
-  var damping = typeof props.damping !== 'undefined' ? props.damping : 0.9
-
   var right = new Float32Array([1, 0, 0])
   var front = new Float32Array([0, 0, 1])
 
-  var minDistance = Math.log('minDistance' in props ? props.minDistance : 0.1)
-  var maxDistance = Math.log('maxDistance' in props ? props.maxDistance : 1000)
+  var minDistance = Math.log(props.minDistance)
+  var maxDistance = Math.log(props.maxDistance)
 
   var ddistance = 0
 
-  var prevX = 0
-  var prevY = 0
+  if (isBrowser && props.mouse) {
+    var prevX = 0
+    var prevY = 0
 
-  if (isBrowser && props.mouse !== false) {
     mouseChange(function (buttons, x, y) {
       if (buttons & 1) {
         var dx = (x - prevX) / window.innerWidth
@@ -53,13 +70,14 @@ function createCamera (regl, props_) {
       prevX = x
       prevY = y
     })
+
     mouseWheel(function (dx, dy) {
       ddistance += dy / window.innerHeight
     })
   }
 
   function damp (x) {
-    var xd = x * damping
+    var xd = x * props.damping
     if (Math.abs(xd) < 0.1) {
       return 0
     }
