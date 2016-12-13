@@ -77,16 +77,16 @@ npm i regl-camera
 #### `camera(block)`
 `regl-camera` sets up an environment with the following variables in both the context and uniform blocks:
 
-| Variable     | Type    | Description                                 |
-|:-------------|:--------|:--------------------------------------------|
-| `view`       | `mat4`  | The view matrix for the camera              |
-| `projection` | `mat4`  | The projection matrix for the camera        |
-| `center`     | `vec3`  | The center of the camera                    |
-| `eye`        | `vec3`  | The eye coordinates of the camera           |
-| `up`         | `vec3`  | The up vector for the camera matrix         |
-| `theta`      | `float` | Latitude angle parameter in radians         |
-| `phi`        | `float` | Longitude angle parameter in radians        |
-| `distance`   | `float` | Distance from camera to center of objective |
+| Variable | Type | Description |
+|----------|------|-------------|
+| `view`   | `mat4` | The view matrix for the camera |
+| `projection` | `mat4` | The projection matrix for the camera |
+| `center` | `vec3` | The center of the camera |
+| `eye` | `vec3` | The eye coordinates of the camera |
+| `up` | `vec3` | The up vector for the camera matrix |
+| `theta` | `float` | Latitude angle parameter in radians |
+| `phi` | `float` | Longitude angle parameter in radians |
+| `distance` | `float` | Distance from camera to center of objective |
 
 **Note**
 These properties can also be accessed and modified directly by accessing the object
