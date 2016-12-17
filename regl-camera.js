@@ -42,10 +42,10 @@ function createCamera (regl, props_) {
   var prevY = 0
 
   if (isBrowser && props.mouse !== false) {
-    var target = element || window
+    var source = element || window
     var width = element ? element.offsetWidth : window.innerWidth
     var height = element ? element.offsetHeight : window.innerHeight
-    mouseChange(target, function (buttons, x, y) {
+    mouseChange(source, function (buttons, x, y) {
       if (buttons & 1) {
         var dx = (x - prevX) / width
         var dy = (y - prevY) / height
@@ -57,7 +57,7 @@ function createCamera (regl, props_) {
       prevX = x
       prevY = y
     })
-    mouseWheel(target, function (dx, dy) {
+    mouseWheel(source, function (dx, dy) {
       ddistance += dy / height
     })
   }
