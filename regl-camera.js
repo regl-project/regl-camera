@@ -45,6 +45,7 @@ function createCamera (regl, props_) {
     var source = element || window
     var width = element ? element.offsetWidth : window.innerWidth
     var height = element ? element.offsetHeight : window.innerHeight
+    var noScroll = true
     mouseChange(source, function (buttons, x, y) {
       if (buttons & 1) {
         var dx = (x - prevX) / width
@@ -59,7 +60,7 @@ function createCamera (regl, props_) {
     })
     mouseWheel(source, function (dx, dy) {
       ddistance += dy / height
-    })
+    }, noScroll)
   }
 
   function damp (x) {
