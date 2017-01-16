@@ -3,10 +3,9 @@ var mouseWheel = require('mouse-wheel')
 var identity = require('gl-mat4/identity')
 var perspective = require('gl-mat4/perspective')
 var lookAt = require('gl-mat4/lookAt')
+var createTouch = require('tinytouch').default
 
 module.exports = createCamera
-
-var isBrowser = typeof window !== 'undefined'
 
 function createCamera (regl, props_) {
   var props = props_ || {}
@@ -27,6 +26,7 @@ function createCamera (regl, props_) {
     dphi: 0
   }
 
+  var element = props.element
   var damping = typeof props.damping !== 'undefined' ? props.damping : 0.9
 
   var right = new Float32Array([1, 0, 0])
@@ -40,22 +40,31 @@ function createCamera (regl, props_) {
   var prevX = 0
   var prevY = 0
 
-  if (isBrowser && props.mouse !== false) {
-    mouseChange(function (buttons, x, y) {
-      if (buttons & 1) {
-        var dx = (x - prevX) / window.innerWidth
-        var dy = (y - prevY) / window.innerHeight
-        var w = Math.max(cameraState.distance, 0.5)
-
-        cameraState.dtheta += w * dx
-        cameraState.dphi += w * dy
-      }
-      prevX = x
-      prevY = y
-    })
-    mouseWheel(function (dx, dy) {
-      ddistance += dy / window.innerHeight
-    })
+  if (props.mouse !== false) {
+    var source = element || window
+    touch = createTouch(element || document.body)
+    var width = element ? element.offsetWidth : window.innerWidth
+    var height = element ? element.offsetHeight : window.innerHeight
+    var noScroll = true
+    var isDown = false
+    touch
+      .on('down', function (e) { isDown = true })
+      .on('up', function (e) { isDown = false })
+      .on('cancel', function (e) { isDown = false })
+      .on('move', function (e) {
+        if (isDown) {
+          var dx = (e.x - prevX) / width
+          var dy = (e.y - prevY) / height
+          var w = Math.max(cameraState.distance, 0.5)
+          cameraState.dtheta += w * dx
+          cameraState.dphi += w * dy
+        }
+        prevX = e.x
+        prevY = e.y
+      })
+    mouseWheel(source, function (dx, dy) {
+      ddistance += dy / height
+    }, noScroll)
   }
 
   function damp (x) {
