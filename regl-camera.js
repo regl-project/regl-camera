@@ -43,13 +43,20 @@ function createCamera (regl, props_) {
 
   if (isBrowser && props.mouse !== false) {
     var source = element || window
-    var width = element ? element.offsetWidth : window.innerWidth
-    var height = element ? element.offsetHeight : window.innerHeight
+
+    function getWidth() {
+      return element ? element.offsetWidth : window.innerWidth
+    }
+
+    function getHeight() {
+      return element ? element.offsetHeight : window.innerHeight
+    }
+
     var noScroll = true
     mouseChange(source, function (buttons, x, y) {
       if (buttons & 1) {
-        var dx = (x - prevX) / width
-        var dy = (y - prevY) / height
+        var dx = (x - prevX) / getWidth()
+        var dy = (y - prevY) / getHeight()
         var w = Math.max(cameraState.distance, 0.5)
 
         cameraState.dtheta += w * dx
@@ -59,7 +66,7 @@ function createCamera (regl, props_) {
       prevY = y
     })
     mouseWheel(source, function (dx, dy) {
-      ddistance += dy / height
+      ddistance += dy / getHeight()
     }, noScroll)
   }
 
