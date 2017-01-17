@@ -44,11 +44,11 @@ function createCamera (regl, props_) {
   if (isBrowser && props.mouse !== false) {
     var source = element || window
 
-    function getWidth() {
+    function getWidth () {
       return element ? element.offsetWidth : window.innerWidth
     }
 
-    function getHeight() {
+    function getHeight () {
       return element ? element.offsetHeight : window.innerHeight
     }
 
