@@ -52,7 +52,7 @@ function createCamera (regl, props_) {
       return element ? element.offsetHeight : window.innerHeight
     }
 
-    var noScroll = true
+    var noScroll = !!props.noScroll
     mouseChange(source, function (buttons, x, y) {
       if (buttons & 1) {
         var dx = (x - prevX) / getWidth()

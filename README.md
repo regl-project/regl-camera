@@ -71,6 +71,7 @@ npm i regl-camera
   + `mouse` set to `false` to turn off mouse events
   + `damping` multiplier for inertial damping (default `0.9`). Set to `0` to disable inertia.
   + `element` is an optional DOM element for mouse events (defaults to `window` object)
+  + `noScroll` set to `true` to disable page scrolling when within the `element` (defaults to `false`)
 
 ### Command usage
 
