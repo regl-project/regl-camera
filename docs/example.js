@@ -1,11 +1,9 @@
-'use strict';
-
-var regl = require('regl');
-var bunny = require('bunny');
+'use strict'
 
 var regl = require('regl')()
 var camera = require('../regl-camera')(regl, {
-  center: [0, 2.5, 0]
+  center: [0, 2.5, 0],
+  damping: 0
 })
 
 var bunny = require('bunny')
@@ -42,4 +40,3 @@ regl.frame(function () {
     drawBunny()
   })
 })
-

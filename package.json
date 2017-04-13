@@ -12,14 +12,19 @@
     "angle-normals": "^1.0.0",
     "browserify": "^13.1.0",
     "bunny": "^1.0.1",
+    "es2040": "^1.2.5",
     "indexhtmlify": "^1.3.1",
     "metadataify": "^1.0.1",
-    "regl": "^1.2.1"
+    "regl": "^1.2.1",
+    "standard": "^10.0.1",
+    "uglify-js": "^2.8.22"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "budo docs/example.js --live --open",
-    "build": "browserify docs/example.js | indexhtmlify | metadataify > docs/index.html"
+    "build": "browserify docs/example.js -t es2040 | uglifyjs -c -m | indexhtmlify | metadataify > docs/index.html",
+    "lint": "standard",
+    "lint-fix": "standard --fix"
   },
   "repository": {
     "type": "git",
