@@ -67,6 +67,7 @@ npm i regl-camera
   + `up` the up vector for the camera
   + `mouse` set to `false` to turn off mouse events
   + `damping` multiplier for inertial damping (default 0.9). Set to 0 to disable inertia.
+  + `preventDefault` boolean flag to prevent mouse wheel from scrolling the whole window. Default is false.
 
 ### Command usage
 

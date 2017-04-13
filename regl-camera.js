@@ -22,7 +22,7 @@ function createCamera (regl, props_) {
     fovy: props.fovy || Math.PI / 4.0,
     near: typeof props.near !== 'undefined' ? props.near : 0.01,
     far: typeof props.far !== 'undefined' ? props.far : 1000.0,
-    preventDefault: typeof props.preventDefault !== 'undefined' ? props.preventDefault : true,
+    preventDefault: typeof props.preventDefault !== 'undefined' ? props.preventDefault : false,
     flipY: !!props.flipY,
     dtheta: 0,
     dphi: 0

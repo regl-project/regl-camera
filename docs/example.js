@@ -3,7 +3,8 @@
 var regl = require('regl')()
 var camera = require('../regl-camera')(regl, {
   center: [0, 2.5, 0],
-  damping: 0
+  damping: 0,
+  preventDefault: true
 })
 
 var bunny = require('bunny')
