@@ -10,6 +10,12 @@ var isBrowser = typeof window !== 'undefined'
 
 function createCamera (regl, props_) {
   var props = props_ || {}
+
+  // Preserve backward-compatibilty while renaming preventDefault ->
+  if (props.noScroll === undefined) {
+    props.noScroll = props.preventDefault;
+  }
+
   var cameraState = {
     view: identity(new Float32Array(16)),
     projection: identity(new Float32Array(16)),
@@ -22,7 +28,7 @@ function createCamera (regl, props_) {
     fovy: props.fovy || Math.PI / 4.0,
     near: typeof props.near !== 'undefined' ? props.near : 0.01,
     far: typeof props.far !== 'undefined' ? props.far : 1000.0,
-    preventDefault: typeof props.preventDefault !== 'undefined' ? props.preventDefault : false,
+    noScroll: typeof props.noScroll !== 'undefined' ? props.noScroll : false,
     flipY: !!props.flipY,
     dtheta: 0,
     dphi: 0
@@ -30,7 +36,7 @@ function createCamera (regl, props_) {
 
   var element = regl._gl.canvas
   element.addEventListener('mousewheel', function (e) {
-    if (cameraState.preventDefault) e.preventDefault()
+    if (cameraState.noScroll) e.preventDefault()
   })
 
   var damping = typeof props.damping !== 'undefined' ? props.damping : 0.9
