@@ -64,10 +64,16 @@ npm i regl-camera
   + `theta` the theta angle for the camera
   + `phi` the phi angle for the camera
   + `distance` the distance from the camera eye to the center
-  + `up` the up vector for the camera
+  + `up` is the up vector for the camera
+  + `fovy` is the field of view angle in y direction (defaults to `Math.PI / 4`)
+  + `near` is the near clipping plane in z (defaults to `0.01`)
+  + `far` is the far clipping plane in z (defaults to `1000.0`)
   + `mouse` set to `false` to turn off mouse events
   + `damping` multiplier for inertial damping (default 0.9). Set to 0 to disable inertia.
   + `noScroll` boolean flag to prevent mouse wheel from scrolling the whole window. Default is false.
+  + `element` is an optional DOM element for mouse events (defaults to regl canvas element)
+  + `rotationSpeed` the rotation interactions (default: `1`)
+  + `zoomSpeed` the zoom interactions (default: `1`)
 
 ### Command usage
 
