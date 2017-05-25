@@ -36,10 +36,9 @@ const drawBunny = regl({
 })
 
 regl.frame(() => {
-  regl.clear({
-    color: [0, 0, 0, 1]
-  })
-  camera(() => {
+  camera((state) => {
+    if (!state.dirty) return;
+    regl.clear({color: [0, 0, 0, 1]})
     drawBunny()
   })
 })
@@ -74,6 +73,7 @@ npm i regl-camera
   + `element` is an optional DOM element for mouse events (defaults to regl canvas element)
   + `rotationSpeed` the rotation interactions (default: `1`)
   + `zoomSpeed` the zoom interactions (default: `1`)
+  + `renderOnDirty` boolean flag to control whether scene is only rendered when the camera state has changed. If true, render can be triggerd at any time by setting `camer.dirty = true`. If false, dirty state can still be detected and used through `context.dirty`.
 
 ### Command usage
 
@@ -90,6 +90,7 @@ npm i regl-camera
 | `theta` | `float` | Latitude angle parameter in radians |
 | `phi` | `float` | Longitude angle parameter in radians |
 | `distance` | `float` | Distance from camera to center of objective |
+| `dirty` | `boolean` | 
 
 **Note**
 These properties can also be accessed and modified directly by accessing the object

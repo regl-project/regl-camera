@@ -33,7 +33,8 @@ function createCamera (regl, props_) {
     dtheta: 0,
     dphi: 0,
     rotationSpeed: typeof props.rotationSpeed !== 'undefined' ? props.rotationSpeed : 1,
-    zoomSpeed: typeof props.zoomSpeed !== 'undefined' ? props.zoomSpeed : 1
+    zoomSpeed: typeof props.zoomSpeed !== 'undefined' ? props.zoomSpeed : 1,
+    renderOnDirty: typeof props.renderOnDirty !== undefined ? !!props.renderOnDirty : false
   }
 
   var element = props.element
@@ -68,6 +69,7 @@ function createCamera (regl, props_) {
 
         cameraState.dtheta += cameraState.rotationSpeed * 4.0 * dx
         cameraState.dphi += cameraState.rotationSpeed * 4.0 * dy
+        cameraState.dirty = true;
       }
       prevX = x
       prevY = y
@@ -75,6 +77,7 @@ function createCamera (regl, props_) {
 
     mouseWheel(source, function (dx, dy) {
       ddistance += dy / getHeight() * cameraState.zoomSpeed
+      cameraState.dirty = true;
     }, props.noScroll)
   }
 
@@ -83,6 +86,7 @@ function createCamera (regl, props_) {
     if (Math.abs(xd) < 0.1) {
       return 0
     }
+    cameraState.dirty = true;
     return xd
   }
 
@@ -130,8 +134,13 @@ function createCamera (regl, props_) {
     lookAt(cameraState.view, eye, center, up)
   }
 
+  cameraState.dirty = true;
+
   var injectContext = regl({
     context: Object.assign({}, cameraState, {
+      dirty: function () {
+        return cameraState.dirty;
+      },
       projection: function (context) {
         perspective(cameraState.projection,
           cameraState.fovy,
@@ -149,12 +158,25 @@ function createCamera (regl, props_) {
   })
 
   function setupCamera (props, block) {
+    if (typeof setupCamera.dirty !== 'undefined') {
+      cameraState.dirty = setupCamera.dirty || cameraState.dirty
+      setupCamera.dirty = undefined;
+    }
+
+    if (props && block) {
+      cameraState.dirty = true;
+    }
+
+    if (cameraState.renderOnDirty && !cameraState.dirty) return;
+
     if (!block) {
       block = props
       props = {}
     }
+
     updateCamera(props)
     injectContext(block)
+    cameraState.dirty = false;
   }
 
   Object.keys(cameraState).forEach(function (name) {

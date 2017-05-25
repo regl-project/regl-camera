@@ -1,14 +1,19 @@
 'use strict'
 
 var regl = require('regl')()
-var camera = require('../regl-camera')(regl, {
+var camera = window.camera = require('../regl-camera')(regl, {
   center: [0, 2.5, 0],
   damping: 0,
-  noScroll: true
+  noScroll: true,
+  renderOnDirty: true
 })
 
 var bunny = require('bunny')
 var normals = require('angle-normals')
+
+window.addEventListener('resize', function () {
+  camera.dirty = true;
+});
 
 var drawBunny = regl({
   frag: `
@@ -34,10 +39,8 @@ var drawBunny = regl({
 })
 
 regl.frame(function () {
-  regl.clear({
-    color: [0, 0, 0, 1]
-  })
   camera(function () {
+    regl.clear({color: [0, 0, 0, 1]})
     drawBunny()
   })
 })
