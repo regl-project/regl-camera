@@ -1,6 +1,6 @@
 {
   "name": "regl-camera",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Camera for regl",
   "main": "regl-camera.js",
   "dependencies": {

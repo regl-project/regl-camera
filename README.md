@@ -90,10 +90,10 @@ npm i regl-camera
 | `theta` | `float` | Latitude angle parameter in radians |
 | `phi` | `float` | Longitude angle parameter in radians |
 | `distance` | `float` | Distance from camera to center of objective |
-| `dirty` | `boolean` | 
+| `dirty` | `boolean` | Flag set to true when camera state has changed |
 
 **Note**
-These properties can also be accessed and modified directly by accessing the object
+These properties can also be accessed and modified directly by accessing the object, though at the moment you will need to manually set `camera.dirty = true` if relying upon `renderOnDirty`
 
 ## License
 (c) 2016 Mikola Lysenko. MIT License
