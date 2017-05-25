@@ -11,8 +11,8 @@ var isBrowser = typeof window !== 'undefined'
 function createCamera (regl, props_) {
   var props = props_ || {}
 
-  // Preserve backward-compatibilty while renaming preventDefault ->
-  if (props.noScroll === undefined) {
+  // Preserve backward-compatibilty while renaming preventDefault -> noScroll
+  if (typeof props.noScroll === 'undefined') {
     props.noScroll = props.preventDefault;
   }
 
@@ -31,14 +31,12 @@ function createCamera (regl, props_) {
     noScroll: typeof props.noScroll !== 'undefined' ? props.noScroll : false,
     flipY: !!props.flipY,
     dtheta: 0,
-    dphi: 0
+    dphi: 0,
+    rotationSpeed: typeof props.rotationSpeed !== 'undefined' ? props.rotationSpeed : 1,
+    zoomSpeed: typeof props.zoomSpeed !== 'undefined' ? props.zoomSpeed : 1
   }
 
-  var element = regl._gl.canvas
-  element.addEventListener('mousewheel', function (e) {
-    if (cameraState.noScroll) e.preventDefault()
-  })
-
+  var element = props.element
   var damping = typeof props.damping !== 'undefined' ? props.damping : 0.9
 
   var right = new Float32Array([1, 0, 0])
@@ -53,21 +51,31 @@ function createCamera (regl, props_) {
   var prevY = 0
 
   if (isBrowser && props.mouse !== false) {
-    mouseChange(function (buttons, x, y) {
-      if (buttons & 1) {
-        var dx = (x - prevX) / window.innerWidth
-        var dy = (y - prevY) / window.innerHeight
-        var w = Math.max(cameraState.distance, 0.5)
+    var source = element || regl._gl.canvas
 
-        cameraState.dtheta += w * dx
-        cameraState.dphi += w * dy
+    function getWidth () {
+      return element ? element.offsetWidth : window.innerWidth
+    }
+
+    function getHeight () {
+      return element ? element.offsetHeight : window.innerHeight
+    }
+
+    mouseChange(source, function (buttons, x, y) {
+      if (buttons & 1) {
+        var dx = (x - prevX) / getWidth()
+        var dy = (y - prevY) / getHeight()
+
+        cameraState.dtheta += cameraState.rotationSpeed * 4.0 * dx
+        cameraState.dphi += cameraState.rotationSpeed * 4.0 * dy
       }
       prevX = x
       prevY = y
     })
-    mouseWheel(function (dx, dy) {
-      ddistance += dy / window.innerHeight
-    })
+
+    mouseWheel(source, function (dx, dy) {
+      ddistance += dy / getHeight() * cameraState.zoomSpeed
+    }, props.noScroll)
   }
 
   function damp (x) {
