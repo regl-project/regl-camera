@@ -3,6 +3,7 @@ var mouseWheel = require('mouse-wheel')
 var identity = require('gl-mat4/identity')
 var perspective = require('gl-mat4/perspective')
 var lookAt = require('gl-mat4/lookAt')
+var objectAssign = require('object-assign')
 
 module.exports = createCamera
 
@@ -137,7 +138,7 @@ function createCamera (regl, props_) {
   cameraState.dirty = true;
 
   var injectContext = regl({
-    context: Object.assign({}, cameraState, {
+    context: objectAssign({}, cameraState, {
       dirty: function () {
         return cameraState.dirty;
       },
