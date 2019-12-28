@@ -13,7 +13,7 @@ function createCamera (regl, props_) {
 
   // Preserve backward-compatibilty while renaming preventDefault -> noScroll
   if (typeof props.noScroll === 'undefined') {
-    props.noScroll = props.preventDefault;
+    props.noScroll = props.preventDefault
   }
 
   var cameraState = {
@@ -50,7 +50,7 @@ function createCamera (regl, props_) {
 
   var prevX = 0
   var prevY = 0
-  var prevDistance = null;
+  var prevDistance = null
 
   if (isBrowser && props.mouse !== false) {
     var source = element || regl._gl.canvas
@@ -70,80 +70,80 @@ function createCamera (regl, props_) {
 
         cameraState.dtheta += cameraState.rotationSpeed * 4.0 * dx
         cameraState.dphi += cameraState.rotationSpeed * 4.0 * dy
-        cameraState.dirty = true;
+        cameraState.dirty = true
       }
       prevX = x
       prevY = y
     })
 
-    source.addEventListener("touchstart", function(ev) {
-      if (event.cancelable) {
-        event.preventDefault();
+    source.addEventListener('touchstart', function (ev) {
+      if (ev.cancelable) {
+        ev.preventDefault()
       }
-      var touch = ev.touches[0];
-      var bounds = source.getBoundingClientRect();
-      var x = touch.clientX - bounds.left;
-      var y = touch.clientY - bounds.top;
-      prevX = x;
-      prevY = y;
-    });
+      var touch = ev.touches[0]
+      var bounds = source.getBoundingClientRect()
+      var x = touch.clientX - bounds.left
+      var y = touch.clientY - bounds.top
+      prevX = x
+      prevY = y
+    })
 
-    source.addEventListener("touchend", function(ev) {
-      prevDistance = null;
+    source.addEventListener('touchend', function (ev) {
+      prevDistance = null
 
       // reset prevX and prevY to prevent jumping
-      if (ev.touches.length == 1) {
-        var touch = ev.touches[0];
-        var bounds = source.getBoundingClientRect();
-        var x = touch.clientX - bounds.left;
-        var y = touch.clientY - bounds.top;
-        prevX = x;
-        prevY = y;
+      if (ev.touches.length === 1) {
+        var touch = ev.touches[0]
+        var bounds = source.getBoundingClientRect()
+        var x = touch.clientX - bounds.left
+        var y = touch.clientY - bounds.top
+        prevX = x
+        prevY = y
       }
-    });
+    })
 
-    source.addEventListener("touchmove", function(ev) {
+    source.addEventListener('touchmove', function (ev) {
       if (ev.cancelable) {
-        ev.preventDefault();
+        ev.preventDefault()
       }
       // One touch, treat as a rotate
-      if (ev.touches.length == 1) {
-        var touch = ev.touches[0];
-        var bounds = source.getBoundingClientRect();
-        var x = touch.clientX - bounds.left;
-        var y = touch.clientY - bounds.top;
+      if (ev.touches.length === 1) {
+        var touch = ev.touches[0]
+        var bounds = source.getBoundingClientRect()
+        var x = touch.clientX - bounds.left
+        var y = touch.clientY - bounds.top
 
-        var dx = (x - prevX) / getWidth();
-        var dy = (y - prevY) / getHeight();
+        var dx = (x - prevX) / getWidth()
+        var dy = (y - prevY) / getHeight()
 
-        cameraState.dtheta += cameraState.rotationSpeed * 4.0 * dx;
-        cameraState.dphi += cameraState.rotationSpeed * 4.0 * dy;
-        cameraState.dirty = true;
+        cameraState.dtheta += cameraState.rotationSpeed * 4.0 * dx
+        cameraState.dphi += cameraState.rotationSpeed * 4.0 * dy
+        cameraState.dirty = true
 
-        prevX = x;
-        prevY = y;
+        prevX = x
+        prevY = y
         // Two fingers, treat as a pinch zoom
-      } else if (ev.touches.length == 2) {
-        var touch1 = ev.touches[0];
-        var touch2 = ev.touches[1];
+      } else if (ev.touches.length === 2) {
+        var touch1 = ev.touches[0]
+        var touch2 = ev.touches[1]
 
-        var dx = touch1.clientX - touch2.clientX;
-        var dy = touch1.clientY - touch2.clientY;
-        var distance = Math.sqrt(dx * dx + dy * dy);
+        var pinchX = touch1.clientX - touch2.clientX
+        var pinchY = touch1.clientY - touch2.clientY
+        var distance = Math.sqrt(pinchX * pinchX + pinchY * pinchY)
         if (prevDistance != null) {
-          var distance_delta = prevDistance - distance;
+          var distanceDelta = prevDistance - distance
           ddistance +=
-            (distance_delta / getHeight()) * cameraState.zoomSpeed * 2.0;
-          cameraState.dirty = true;
+            (distanceDelta / getHeight()) * cameraState.zoomSpeed * 2.0
+          cameraState.dirty = true
         }
 
-        prevDistance = distance;
+        prevDistance = distance
       }
-    });
+    })
 
     mouseWheel(source, function (dx, dy) {
       ddistance += dy / getHeight() * cameraState.zoomSpeed
-      cameraState.dirty = true;
+      cameraState.dirty = true
     }, props.noScroll)
   }
 
@@ -152,7 +152,7 @@ function createCamera (regl, props_) {
     if (Math.abs(xd) < 0.1) {
       return 0
     }
-    cameraState.dirty = true;
+    cameraState.dirty = true
     return xd
   }
 
@@ -200,12 +200,12 @@ function createCamera (regl, props_) {
     lookAt(cameraState.view, eye, center, up)
   }
 
-  cameraState.dirty = true;
+  cameraState.dirty = true
 
   var injectContext = regl({
     context: Object.assign({}, cameraState, {
       dirty: function () {
-        return cameraState.dirty;
+        return cameraState.dirty
       },
       projection: function (context) {
         perspective(cameraState.projection,
@@ -226,14 +226,14 @@ function createCamera (regl, props_) {
   function setupCamera (props, block) {
     if (typeof setupCamera.dirty !== 'undefined') {
       cameraState.dirty = setupCamera.dirty || cameraState.dirty
-      setupCamera.dirty = undefined;
+      setupCamera.dirty = undefined
     }
 
     if (props && block) {
-      cameraState.dirty = true;
+      cameraState.dirty = true
     }
 
-    if (cameraState.renderOnDirty && !cameraState.dirty) return;
+    if (cameraState.renderOnDirty && !cameraState.dirty) return
 
     if (!block) {
       block = props
@@ -242,7 +242,7 @@ function createCamera (regl, props_) {
 
     updateCamera(props)
     injectContext(block)
-    cameraState.dirty = false;
+    cameraState.dirty = false
   }
 
   Object.keys(cameraState).forEach(function (name) {
