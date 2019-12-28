@@ -75,6 +75,46 @@ function createCamera (regl, props_) {
       prevY = y
     })
 
+
+    source.addEventListener("touchstart", function(ev) {
+      if (event.cancelable) {
+        event.preventDefault();
+      }
+      var touch = ev.touches[0];
+      var bounds = source.getBoundingClientRect();
+      var x = touch.clientX - bounds.left;
+      var y = touch.clientY - bounds.top;
+      prevX = x
+      prevY = y
+    });
+
+    source.addEventListener("touchend", function(event) {
+      if (event.cancelable) {
+        event.preventDefault();
+      }
+    });
+
+    source.addEventListener("touchmove", function(ev) {
+      if (ev.cancelable) {
+        ev.preventDefault();
+      }
+
+      var touch = ev.touches[0];
+      var bounds = source.getBoundingClientRect();
+      var x = touch.clientX - bounds.left;
+      var y = touch.clientY - bounds.top;
+     
+      var dx = (x - prevX) / getWidth()
+      var dy = (y - prevY) / getHeight()
+
+      cameraState.dtheta += cameraState.rotationSpeed * 4.0 * dx
+      cameraState.dphi += cameraState.rotationSpeed * 4.0 * dy
+      cameraState.dirty = true;
+
+      prevX = x
+      prevY = y
+    });
+
     mouseWheel(source, function (dx, dy) {
       ddistance += dy / getHeight() * cameraState.zoomSpeed
       cameraState.dirty = true;
