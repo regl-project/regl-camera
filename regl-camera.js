@@ -50,6 +50,7 @@ function createCamera (regl, props_) {
 
   var prevX = 0
   var prevY = 0
+  var prevDistance = null;
 
   if (isBrowser && props.mouse !== false) {
     var source = element || regl._gl.canvas
@@ -75,7 +76,6 @@ function createCamera (regl, props_) {
       prevY = y
     })
 
-
     source.addEventListener("touchstart", function(ev) {
       if (event.cancelable) {
         event.preventDefault();
@@ -84,35 +84,51 @@ function createCamera (regl, props_) {
       var bounds = source.getBoundingClientRect();
       var x = touch.clientX - bounds.left;
       var y = touch.clientY - bounds.top;
-      prevX = x
-      prevY = y
+      prevX = x;
+      prevY = y;
     });
 
-    source.addEventListener("touchend", function(event) {
-      if (event.cancelable) {
-        event.preventDefault();
-      }
+    source.addEventListener("touchend", function(ev) {
+      prevDistance = null;
     });
 
     source.addEventListener("touchmove", function(ev) {
       if (ev.cancelable) {
         ev.preventDefault();
       }
+      // One touch, treat as a rotate
+      if (ev.touches.length == 1) {
+        var touch = ev.touches[0];
+        var bounds = source.getBoundingClientRect();
+        var x = touch.clientX - bounds.left;
+        var y = touch.clientY - bounds.top;
 
-      var touch = ev.touches[0];
-      var bounds = source.getBoundingClientRect();
-      var x = touch.clientX - bounds.left;
-      var y = touch.clientY - bounds.top;
-     
-      var dx = (x - prevX) / getWidth()
-      var dy = (y - prevY) / getHeight()
+        var dx = (x - prevX) / getWidth();
+        var dy = (y - prevY) / getHeight();
 
-      cameraState.dtheta += cameraState.rotationSpeed * 4.0 * dx
-      cameraState.dphi += cameraState.rotationSpeed * 4.0 * dy
-      cameraState.dirty = true;
+        cameraState.dtheta += cameraState.rotationSpeed * 4.0 * dx;
+        cameraState.dphi += cameraState.rotationSpeed * 4.0 * dy;
+        cameraState.dirty = true;
 
-      prevX = x
-      prevY = y
+        prevX = x;
+        prevY = y;
+        // Two fingers, treat as a pinch zoom
+      } else if (ev.touches.length == 2) {
+        var touch1 = ev.touches[0];
+        var touch2 = ev.touches[1];
+
+        var dx = touch1.clientX - touch2.clientX;
+        var dy = touch1.clientY - touch2.clientY;
+        var distance = Math.sqrt(dx * dx + dy * dy);
+        if (prevDistance != null) {
+          var distance_delta = prevDistance - distance;
+          ddistance +=
+            (distance_delta / getHeight()) * cameraState.zoomSpeed * 2.0;
+          cameraState.dirty = true;
+        }
+
+        prevDistance = distance;
+      }
     });
 
     mouseWheel(source, function (dx, dy) {
