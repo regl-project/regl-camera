@@ -90,6 +90,16 @@ function createCamera (regl, props_) {
 
     source.addEventListener("touchend", function(ev) {
       prevDistance = null;
+
+      // reset prevX and prevY to prevent jumping
+      if (ev.touches.length == 1) {
+        var touch = ev.touches[0];
+        var bounds = source.getBoundingClientRect();
+        var x = touch.clientX - bounds.left;
+        var y = touch.clientY - bounds.top;
+        prevX = x;
+        prevY = y;
+      }
     });
 
     source.addEventListener("touchmove", function(ev) {
