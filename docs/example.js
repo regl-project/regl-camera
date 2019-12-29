@@ -12,8 +12,8 @@ var bunny = require('bunny')
 var normals = require('angle-normals')
 
 window.addEventListener('resize', function () {
-  camera.dirty = true;
-});
+  camera.dirty = true
+})
 
 var drawBunny = regl({
   frag: `
