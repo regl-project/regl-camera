@@ -183,5 +183,7 @@ function createCamera (regl, props_) {
     setupCamera[name] = cameraState[name]
   })
 
+  setupCamera.update = updateCamera
+
   return setupCamera
 }
